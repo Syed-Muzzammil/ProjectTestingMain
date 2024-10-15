@@ -14,7 +14,7 @@ mongoose.connect('mongodb+srv://movielens_admin:movielenspassword@cluster0.cy68m
   .catch(err => console.error("Failed to connect to MongoDB Atlas", err));
 
 // Serve static files from the 'public' folder
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('public'));
 
 // Movie schema and model
 const movieSchema = new mongoose.Schema({
@@ -24,6 +24,8 @@ const movieSchema = new mongoose.Schema({
   description: String,
   rating: Number,
   reviews: [{ user: String, review: String }],
+  actors: [String],  // Array of actors
+  genre: String,     // Movie genre
 });
 
 // Explicitly specify the collection name as 'movies'
@@ -34,51 +36,20 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Fetch all movies
+// Search route
 app.get('/movies', async (req, res) => {
+  const searchQuery = req.query.search;
   try {
-    const movies = await Movie.find();
+    const movies = await Movie.find({
+      $or: [
+        { title: { $regex: searchQuery, $options: 'i' } },
+        { actors: { $elemMatch: { $regex: searchQuery, $options: 'i' } } },
+        { genre: { $regex: searchQuery, $options: 'i' } },
+      ]
+    });
     res.json(movies);
   } catch (err) {
     res.status(500).json({ error: err.message });
-  }
-});
-
-// Add a new movie
-app.post('/movies', async (req, res) => {
-  const { title, poster, trailer, description, rating } = req.body;
-  const movie = new Movie({ title, poster, trailer, description, rating, reviews: [] });
-  try {
-    await movie.save();
-    res.status(201).json(movie);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-});
-
-// Add a review to a movie
-app.post('/movies/:id/review', async (req, res) => {
-  const { user, review } = req.body;
-  try {
-    const movie = await Movie.findById(req.params.id);
-    movie.reviews.push({ user, review });
-    await movie.save();
-    res.status(201).json(movie);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-});
-
-// Update movie rating
-app.post('/movies/:id/rate', async (req, res) => {
-  const { rating } = req.body;
-  try {
-    const movie = await Movie.findById(req.params.id);
-    movie.rating = rating;
-    await movie.save();
-    res.status(200).json(movie);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
   }
 });
 

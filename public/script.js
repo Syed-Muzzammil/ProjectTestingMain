@@ -1,9 +1,9 @@
-async function fetchMovies() {
-  const res = await fetch('http://localhost:5000/movies');
+async function fetchMovies(query = '') {
+  const res = await fetch(`http://localhost:5000/movies?search=${query}`);
   const movies = await res.json();
   const moviesContainer = document.getElementById('movies-container');
   moviesContainer.innerHTML = '';
-  
+
   movies.forEach(movie => {
     const movieCard = document.createElement('div');
     movieCard.className = 'movie-card';
@@ -35,35 +35,22 @@ async function fetchMovies() {
       movieCard.querySelector('.less-btn').style.display = 'none';
     });
 
-    const reviewMoreBtn = movieCard.querySelector('.review-more-btn');
-    if (reviewMoreBtn) {
-      reviewMoreBtn.addEventListener('click', () => {
-        movieCard.querySelector('.reviews').innerHTML = movie.reviews.map(r => `<p>${r.user}: ${r.review}</p>`).join('');
-      });
-    }
-
     const playBtn = movieCard.querySelector('.play-trailer-btn');
     playBtn.addEventListener('click', () => {
-      // Get the video ID from the YouTube trailer URL
       const videoId = movie.trailer.split('v=')[1].split('&')[0];
-
-      // Create the iframe element with the correct URL format for embedding
       const trailerIframe = document.createElement('iframe');
       trailerIframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&fs=1`;
-      trailerIframe.width = "800"; 
-      trailerIframe.height = "450"; 
+      trailerIframe.width = "800";
+      trailerIframe.height = "450";
       trailerIframe.frameBorder = "0";
       trailerIframe.allow = "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture";
       trailerIframe.allowFullscreen = true;
-
-      // Append the iframe to the movie card (this will replace the button)
       movieCard.appendChild(trailerIframe);
+
       playBtn.style.display = 'none';
 
-      // Create the close button
       const closeBtn = document.createElement('button');
       closeBtn.textContent = 'X';
-      closeBtn.className = 'close-trailer-btn';
       closeBtn.addEventListener('click', () => {
         movieCard.removeChild(trailerIframe);
         movieCard.removeChild(closeBtn);
@@ -74,4 +61,9 @@ async function fetchMovies() {
   });
 }
 
-window.onload = fetchMovies;
+async function searchMovies() {
+  const query = document.getElementById('search-input').value;
+  fetchMovies(query);
+}
+
+window.onload = () => fetchMovies();
