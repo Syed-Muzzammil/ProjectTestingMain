@@ -25,7 +25,7 @@ const movieSchema = new mongoose.Schema({
   rating: Number,
   reviews: [{ user: String, review: String }],
   actors: [String],  // Array of actors
-  genre: String,     // Movie genre
+  genre: [String],     // Movie genre
 });
 
 // Explicitly specify the collection name as 'movies'
@@ -50,6 +50,17 @@ app.get('/movies', async (req, res) => {
     res.json(movies);
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+// Add a new movie to the database
+app.post('/movies', async (req, res) => {
+  const newMovie = new Movie(req.body);
+  try {
+    await newMovie.save();
+    res.status(201).json(newMovie);  // Return the created movie
+  } catch (err) {
+    res.status(400).json({ error: err.message });
   }
 });
 
