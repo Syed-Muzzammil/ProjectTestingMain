@@ -53,6 +53,29 @@ app.get('/movies', async (req, res) => {
   }
 });
 
+// Add movie route
+app.post('/movies', async (req, res) => {
+  const { title, poster, trailer, description, rating, reviews, actors, genre } = req.body;
+
+  const newMovie = new Movie({
+    title,
+    poster,
+    trailer,
+    description,
+    rating,
+    reviews,
+    actors,
+    genre,
+  });
+
+  try {
+    const savedMovie = await newMovie.save();
+    res.status(201).json(savedMovie); // Send the saved movie back as a response
+  } catch (err) {
+    res.status(400).json({ error: err.message }); // Handle errors appropriately
+  }
+});
+
 // Start the server
 app.listen(5000, () => {
   console.log('Server is running on port 5000');

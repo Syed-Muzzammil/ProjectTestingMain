@@ -7,11 +7,13 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>MovieLens</h1>
-  
-  <!-- Search Bar -->
-  <input type="text" id="search-input" placeholder="Search movies by title, actor, or genre" />
-  <button onclick="searchMovies()">Search</button>
+  <header>
+    <h1>MovieLens</h1>
+    <div class="search-container">
+      <input type="text" id="search-input" placeholder="Search movies by title, actor, or genre" />
+      <button onclick="searchMovies()">Search</button>
+    </div>
+  </header>
   
   <div id="movies-container"></div>
   

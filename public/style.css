@@ -1,61 +1,89 @@
 body {
   font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
+  background-color: #000; /* Black background */
   margin: 0;
   padding: 0;
   text-align: center;
+  color: #f0c040; /* Yellow text */
 }
-  
+
+header {
+  display: flex;
+  justify-content: space-between; /* Space between title and search bar */
+  align-items: center; /* Center vertically */
+  padding: 20px 40px; /* Added horizontal padding */
+}
+
+h1 {
+  color: #f0c040; /* Yellow header */
+  margin: 0; /* Remove default margin */
+}
+
+.search-container {
+  margin: 0; /* Remove default margin */
+}
+
+input[type="text"] {
+  padding: 10px;
+  width: 300px;
+  border: 2px solid #f0c040; /* Yellow border */
+  border-radius: 5px;
+  outline: none;
+  margin-right: 10px; /* Added right margin to the input */
+}
+
+input[type="text"]:focus {
+  border-color: #f0c040; /* Yellow border on focus */
+}
+
+button {
+  padding: 10px 15px;
+  background-color: #f0c040; /* Yellow button */
+  color: #000; /* Black text */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #ccc; /* Light gray on hover */
+}
+
 #movies-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  margin-top: 20px;
+  padding: 20px; /* Added padding around the movies container */
 }
-  
-/* Adjust the movie card to handle the video inside the card */
+
 .movie-card {
-  background: #fff;
-  border: 1px solid #ccc;
+  background: #1c1c1c; /* Dark background for movie cards */
+  border: 1px solid #f0c040; /* Yellow border for movie cards */
   margin: 10px;
   padding: 20px;
   width: 300px;
   text-align: left;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  position: relative; /* Added position for iframe positioning */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-/* Make sure iframe is centered inside the movie card */
 iframe {
   display: block;
   margin: 10px auto; /* Center the iframe */
   max-width: 100%;
 }
 
-/* Hide buttons when not needed */
-button {
-  display: inline-block;
-  margin-top: 10px;
-}
-
-button:focus {
-  outline: none;
-}
-
-  
-.movie-poster {
-  width: 100%;
-}
-  
 .description, .reviews {
   margin-top: 10px;
+  color: #f0c040; /* Yellow text for descriptions and reviews */
 }
-  
+
 .more-btn, .review-more-btn {
-  color: blue;
+  color: #f0c040; /* Yellow links */
   cursor: pointer;
   text-decoration: underline;
 }
-  
+
 .close-trailer-btn {
   background: red;
   color: white;
