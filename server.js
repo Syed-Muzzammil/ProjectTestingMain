@@ -25,7 +25,7 @@ const movieSchema = new mongoose.Schema({
   rating: Number,
   reviews: [{ user: String, review: String }],
   actors: [String],  // Array of actors
-  genre: String,     // Movie genre
+  genre: [String],     // Movie genre
 });
 
 // Explicitly specify the collection name as 'movies'
@@ -53,26 +53,14 @@ app.get('/movies', async (req, res) => {
   }
 });
 
-// Add movie route
+// Add a new movie to the database
 app.post('/movies', async (req, res) => {
-  const { title, poster, trailer, description, rating, reviews, actors, genre } = req.body;
-
-  const newMovie = new Movie({
-    title,
-    poster,
-    trailer,
-    description,
-    rating,
-    reviews,
-    actors,
-    genre,
-  });
-
+  const newMovie = new Movie(req.body);
   try {
-    const savedMovie = await newMovie.save();
-    res.status(201).json(savedMovie); // Send the saved movie back as a response
+    await newMovie.save();
+    res.status(201).json(newMovie);  // Return the created movie
   } catch (err) {
-    res.status(400).json({ error: err.message }); // Handle errors appropriately
+    res.status(400).json({ error: err.message });
   }
 });
 
